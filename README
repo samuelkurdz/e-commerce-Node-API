@@ -1,0 +1,31 @@
+eCommerce **API**
+=========
+
+This eCommerce API repository is to aimed at implementing a RESTful API using the NodeJS, MongoDB and more. 
+
+The project we use is currently being created by [Samuel Adebayo](http://github.com/samuelkurdz).
+
+
+
+## Project Overview
+
+1. Implement a RESTful API ([wikipedia](https://en.wikipedia.org/wiki/Representational_state_transfer)) from scratch.
+
+2. Products & Categories
+	- Create Serializers and API Views
+	- Product variations API (pricing + name)
+	- Implement product photos
+
+3. Querying & Filtering
+	- Create a Search Function for the API
+	- Enable Filtering for further filtering of Search Results (or List Results)
+
+4. User Specific
+	- Cart, Checkout, & finalizing Orders
+	- JWT (JSON Web Token) Authentication
+	- View User-only Orders
+
+5. Documentation for the RESTful API.
+
+6. Implement in GraphQL.
+

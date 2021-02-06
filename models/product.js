@@ -8,7 +8,7 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
-  thumbnailUrl: [{
+  thumbnailUrls: [{
     type: String,
     required: true,
   }],
@@ -16,7 +16,11 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
-  category: [{
+  categories: [{
+    type: String,
+    required: true,
+  }],
+  variations: [{
     type: String,
     required: true,
   }],

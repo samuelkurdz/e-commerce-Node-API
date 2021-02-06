@@ -23,7 +23,7 @@ exports.getProducts = (req, res, next) => {
   });
 };
 
-exports.getProduct = (req, res, next) => {
+exports.getSingleProduct = (req, res, next) => {
   const { productId } = req.params;
   Product.findById(productId).then((product) => {
     if (!product) {

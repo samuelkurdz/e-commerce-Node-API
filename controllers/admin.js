@@ -41,19 +41,21 @@ exports.postAddProduct = (req, res, next) => {
 
   const {
     name,
-    category,
+    categories,
     availableQuantity,
     price,
     description,
-    thumbnailUrl,
+    thumbnailUrls,
+    variations,
   } = req.body;
   const product = new Product({
     name,
-    category,
+    categories,
     availableQuantity,
     price,
     description,
-    thumbnailUrl,
+    thumbnailUrls,
+    variations,
   });
   //  saving product to database
   product.save().then((result) => {
@@ -63,7 +65,7 @@ exports.postAddProduct = (req, res, next) => {
   });
 };
 
-exports.getProduct = (req, res, next) => {
+exports.getSingleProduct = (req, res, next) => {
   const { productId } = req.params;
   Product.findById(productId).then((product) => {
     if (!product) {
@@ -72,6 +74,21 @@ exports.getProduct = (req, res, next) => {
       throw error;
     }
     res.status(200).json(product);
+  }).catch((error) => {
+    errorThrower(error, next);
+  });
+};
+
+exports.postDeleteProduct = (req, res, next) => {
+  const { productId } = req.params;
+  Product.findByIdAndRemove(productId).then((result) => {
+    console.log(result);
+    if (!result) {
+      const error = new Error('Product does not exist');
+      error.statusCode = 400;
+      throw error;
+    }
+    res.status(200).json({ message: 'Product Deleted Successfully' });
   }).catch((error) => {
     errorThrower(error, next);
   });

@@ -8,7 +8,7 @@ const router = express.Router();
 // /admin/products => GET
 router.get('/products', adminController.getProducts);
 
-// // /admin/add-product => POST
+// /admin/add-product => POST
 router.post(
   '/add-product',
   // minimal validation in place
@@ -19,10 +19,11 @@ router.post(
   adminController.postAddProduct,
 );
 
-router.get('/edit-product/:productId', adminController.getProduct);
+router.get('/edit-product/:productId', adminController.getSingleProduct);
 // //
 // router.post('/edit-product', adminController.postEditProduct);
-// //
-// router.post('/delete-product', adminController.postDeleteProduct);
+
+// /admin/delete-product => DELETE
+router.delete('/delete-product/:productId', adminController.postDeleteProduct);
 
 module.exports = router;

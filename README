@@ -12,9 +12,8 @@ The project we use is currently being created by [Samuel Adebayo](http://github.
 1. Implement a RESTful API ([wikipedia](https://en.wikipedia.org/wiki/Representational_state_transfer)) from scratch.
 
 2. Products & Categories
-	- Create Serializers and API Views
-	- Product variations API (pricing + name)
-	- Implement product photos
+	- Admin Capabilities, creation, deletion and update of products
+	- Products available for all users (logged in or not)
 
 3. Querying & Filtering
 	- Create a Search Function for the API

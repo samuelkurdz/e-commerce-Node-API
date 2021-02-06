@@ -20,8 +20,10 @@ router.post(
 );
 
 router.get('/edit-product/:productId', adminController.getSingleProduct);
-// //
-// router.post('/edit-product', adminController.postEditProduct);
+
+// /admin/update-product => PUT
+// remember to implement validation here too
+router.put('/edit-product/:productId', adminController.postEditProduct);
 
 // /admin/delete-product => DELETE
 router.delete('/delete-product/:productId', adminController.postDeleteProduct);

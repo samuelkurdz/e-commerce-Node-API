@@ -2,11 +2,12 @@ const express = require('express');
 const { body } = require('express-validator');
 
 const adminController = require('../controllers/admin');
+const isAuthWare = require('../middlewares/is-auth');
 
 const router = express.Router();
 
 // /admin/products => GET
-router.get('/products', adminController.getProducts);
+router.get('/products', isAuthWare, adminController.getProducts);
 
 // /admin/add-product => POST
 router.post(

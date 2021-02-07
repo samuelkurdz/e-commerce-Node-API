@@ -16,23 +16,25 @@ const errorThrower = (error, next) => {
 // it moves to the catch error callback
 
 exports.getProducts = (req, res, next) => {
-  Product.find().then((products) => {
-    res.status(200).json(products);
-  }).catch((error) => {
-    errorThrower(error, next);
-  });
+  Product.find()
+    .then((products) => {
+      res.status(200).json(products);
+    }).catch((error) => {
+      errorThrower(error, next);
+    });
 };
 
 exports.getSingleProduct = (req, res, next) => {
   const { productId } = req.params;
-  Product.findById(productId).then((product) => {
-    if (!product) {
-      const error = new Error('Could not find product');
-      error.statusCode = 404;
-      throw error;
-    }
-    res.status(200).json(product);
-  }).catch((error) => {
-    errorThrower(error, next);
-  });
+  Product.findById(productId)
+    .then((product) => {
+      if (!product) {
+        const error = new Error('Could not find product');
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json(product);
+    }).catch((error) => {
+      errorThrower(error, next);
+    });
 };

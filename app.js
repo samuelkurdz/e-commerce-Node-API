@@ -8,6 +8,7 @@ const uri = 'mongodb+srv://samRed:dayo10red@cluster0.rrjom.mongodb.net/Ecommerce
 
 const shopRoutes = require('./routes/shop');
 const adminRoutes = require('./routes/admin');
+const authRoutes = require('./routes/auth');
 //  because I do not need a route for 404 page,
 //  I am returning the controller to take case of any 404
 const errorController = require('./controllers/error');
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/admin', adminRoutes);
+app.use('/auth', authRoutes);
 app.use(shopRoutes);
 
 // error handling middleware
@@ -30,7 +32,8 @@ app.use((error, req, res, next) => {
   console.log(error, 'error logged');
   const status = error.statusCode || 500;
   const { message } = error;
-  res.status(status).json({ message });
+  const { data } = error;
+  res.status(status).json({ message, data });
 });
 
 app.use(errorController.get404);

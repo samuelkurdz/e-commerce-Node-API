@@ -7,7 +7,7 @@ const { body } = require('express-validator');
 const User = require('../models/user');
 const authController = require('../controllers/auth');
 
-// /products/ single product id => GET
+// /products/ sign up new User => PUT
 router.put(
   '/signup',
   [
@@ -40,6 +40,6 @@ router.put(
   authController.signUp,
 );
 
-// router.get('/cart', shopController.getCart);
+router.post('/login', authController.login);
 
 module.exports = router;

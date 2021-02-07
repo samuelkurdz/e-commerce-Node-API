@@ -77,11 +77,6 @@ exports.postAddProduct = (req, res, next) => {
 exports.getSingleProduct = (req, res, next) => {
   const { productId } = req.params;
   Product.findById(productId).then((product) => {
-    // if (!product) {
-    //   const error = new Error('Could not find product');
-    //   error.statusCode = 404;
-    //   throw error;
-    // }
     noProductFoundError(product);
     res.status(200).json(product);
   }).catch((error) => {

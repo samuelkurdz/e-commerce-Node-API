@@ -13,7 +13,7 @@ router.get('/products/:productId', shopController.getSingleProduct);
 
 router.get('/cart', isAuthWare, shopController.getCart);
 
-// router.post('/cart', shopController.postCart);
+router.post('/cart', isAuthWare, shopController.addProductToCart);
 
 // router.post('/cart-delete-item', shopController.postCartDeleteProduct);
 

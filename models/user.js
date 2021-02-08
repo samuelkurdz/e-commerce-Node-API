@@ -30,26 +30,27 @@ const userSchema = new Schema({
   },
 });
 
-// userSchema.methods.addToCart = (product) => {
-//   const cartProductIndex = this.cart.items.findIndex((cp) => cp.productId.toString() === product._id.toString());
-//   let newQuantity = 1;
-//   const updatedCartItems = [...this.cart.items];
-//   // cartProductIndex throws -1 if product is not in the cart Items array
-//   if (cartProductIndex >= 0) {
-//     newQuantity = this.cart.items[cartProductIndex].quantity + 1;
-//     updatedCartItems[cartProductIndex].quantity = newQuantity;
-//   } else {
-//     updatedCartItems.push({
-//       productId: product._id,
-//       quantity: newQuantity,
-//     });
-//   }
+// eslint-disable-next-line func-names
+userSchema.methods.addToCart = function (product) {
+  const cartProductIndex = this.cart.items.findIndex((cartProduct) => cartProduct.productId.toString() === product._id.toString());
+  let newQuantity = 1;
+  const updatedCartItems = [...this.cart.items];
+  // cartProductIndex throws -1 if product is not in the cart Items array
+  if (cartProductIndex >= 0) {
+    newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+    updatedCartItems[cartProductIndex].quantity = newQuantity;
+  } else {
+    updatedCartItems.push({
+      productId: product._id,
+      quantity: newQuantity,
+    });
+  }
 
-//   this.cart = {
-//     items: updatedCartItems,
-//   };
-//   return this.save();
-// };
+  this.cart = {
+    items: updatedCartItems,
+  };
+  return this.save();
+};
 
 // userSchema.methods.deleteItemFromCart = (productId) => {
 //   const updatedCartItems = this.cart.items.filter((item) => item.productId.toString() !== productId.toString());

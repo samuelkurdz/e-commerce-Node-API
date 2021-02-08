@@ -34,7 +34,8 @@ exports.getProducts = (req, res, next) => {
         throw error;
       }
       res.status(200).json(products);
-    }).catch((error) => {
+    })
+    .catch((error) => {
       errorThrower(error, next);
     });
 };
@@ -71,7 +72,8 @@ exports.postAddProduct = (req, res, next) => {
   product.save()
     .then((result) => {
       res.status(201).json(result);
-    }).catch((error) => {
+    })
+    .catch((error) => {
       errorThrower(error, next);
     });
 };
@@ -82,7 +84,8 @@ exports.getSingleProduct = (req, res, next) => {
     .then((product) => {
       noProductFoundError(product);
       res.status(200).json(product);
-    }).catch((error) => {
+    })
+    .catch((error) => {
       errorThrower(error, next);
     });
 };
@@ -97,7 +100,8 @@ exports.postDeleteProduct = (req, res, next) => {
         throw error;
       }
       res.status(200).json({ message: 'Product Deleted Successfully' });
-    }).catch((error) => {
+    })
+    .catch((error) => {
       errorThrower(error, next);
     });
 };
@@ -124,9 +128,11 @@ exports.postEditProduct = (req, res, next) => {
       product.variations = variations;
       product.thumbnailUrls = thumbnailUrls;
       return product.save();
-    }).then((updatedProduct) => {
+    })
+    .then((updatedProduct) => {
       res.status(200).json({ message: 'Product Updated', updatedProduct });
-    }).catch((error) => {
+    })
+    .catch((error) => {
       errorThrower(error, next);
     });
 };

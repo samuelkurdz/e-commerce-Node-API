@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-len */
 const mongoose = require('mongoose');
@@ -30,7 +31,6 @@ const userSchema = new Schema({
   },
 });
 
-// eslint-disable-next-line func-names
 userSchema.methods.addToCart = function (product) {
   const cartProductIndex = this.cart.items.findIndex((cartProduct) => cartProduct.productId.toString() === product._id.toString());
   let newQuantity = 1;
@@ -52,17 +52,17 @@ userSchema.methods.addToCart = function (product) {
   return this.save();
 };
 
-// userSchema.methods.deleteItemFromCart = (productId) => {
-//   const updatedCartItems = this.cart.items.filter((item) => item.productId.toString() !== productId.toString());
-//   this.cart = {
-//     items: updatedCartItems,
-//   };
-//   return this.save();
-// };
+userSchema.methods.deleteItemFromCart = function (productId) {
+  const updatedCartItems = this.cart.items.filter((item) => item.productId.toString() !== productId.toString());
+  this.cart = {
+    items: updatedCartItems,
+  };
+  return this.save();
+};
 
-// userSchema.methods.clearCart = () => {
-//   this.cart = { items: [] };
-//   return this.save();
-// };
+userSchema.methods.clearCart = function () {
+  this.cart = { items: [] };
+  return this.save();
+};
 
 module.exports = mongoose.model('User', userSchema);

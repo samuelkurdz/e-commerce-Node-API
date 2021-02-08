@@ -58,8 +58,6 @@ exports.getCart = (req, res, next) => {
 };
 
 exports.addProductToCart = (req, res, next) => {
-  //  userId is in the re.userId too;
-  //  use the userId to access the user model methods of add to cart
   const { productId } = req.body;
   let productToAdd;
   const { userId } = req;
@@ -80,6 +78,34 @@ exports.addProductToCart = (req, res, next) => {
         throw error;
       }
       return user.addToCart(productToAdd);
+    })
+    .then((updatedUser) => {
+      res.status(200).json({ cart: updatedUser.cart });
+    })
+    .catch((error) => {
+      errorThrower(error, next);
+    });
+};
+
+exports.deleteCartProduct = (req, res, next) => {
+  const { productId } = req.params;
+  const { userId } = req;
+  Product.findById(productId)
+    .then((product) => {
+      if (!product) {
+        const error = new Error('Could not find product');
+        error.statusCode = 404;
+        throw error;
+      }
+      return User.findById(userId);
+    })
+    .then((user) => {
+      if (!user) {
+        const error = new Error('User not defined');
+        error.statusCode = 401;
+        throw error;
+      }
+      return user.deleteItemFromCart(productId);
     })
     .then((updatedUser) => {
       res.status(200).json({ cart: updatedUser.cart });

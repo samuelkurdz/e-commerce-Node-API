@@ -44,15 +44,21 @@ exports.getSingleProduct = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   const { userId } = req;
+  let user;
   User.findById(userId)
-    .then((loggedinUser) => {
-      if (!loggedinUser) {
+    .then((confirmedUser) => {
+      if (!confirmedUser) {
         const error = new Error('Could not find user');
         error.statusCode = 404;
         throw error;
       }
-      res.status(200).json({ cart: loggedinUser.cart });
-    }).catch((error) => {
+      user = confirmedUser;
+      return user.populate('cart.items.productId').execPopulate();
+    })
+    .then((populatedUser) => {
+      res.status(200).json({ cart: populatedUser.cart });
+    })
+    .catch((error) => {
       errorThrower(error, next);
     });
 };

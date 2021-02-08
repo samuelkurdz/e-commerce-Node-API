@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken');
 const errorThrower = (error, next) => {
   if (!error.statusCode) {
     // eslint-disable-next-line no-param-reassign
-    error.statusCode = 500;
+    error.statusCode = 401;
     // eslint-disable-next-line no-param-reassign
-    error.message = 'Internal Server Error';
+    error.message = 'Not authenticated';
   }
   next(error);
 };

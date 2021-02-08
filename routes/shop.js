@@ -3,6 +3,7 @@ const express = require('express');
 const shopController = require('../controllers/shop');
 
 const router = express.Router();
+const isAuthWare = require('../middlewares/is-auth');
 
 // /products => GET
 router.get('/products', shopController.getProducts);
@@ -10,7 +11,7 @@ router.get('/products', shopController.getProducts);
 // /products/ single product id => GET
 router.get('/products/:productId', shopController.getSingleProduct);
 
-// router.get('/cart', shopController.getCart);
+router.get('/cart', isAuthWare, shopController.getCart);
 
 // router.post('/cart', shopController.postCart);
 

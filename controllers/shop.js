@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 const Product = require('../models/product');
+const User = require('../models/user');
 
 const errorThrower = (error, next) => {
   if (!error.statusCode) {
@@ -34,6 +35,22 @@ exports.getSingleProduct = (req, res, next) => {
         throw error;
       }
       res.status(200).json(product);
+    }).catch((error) => {
+      errorThrower(error, next);
+    });
+};
+
+// eslint-disable-next-line no-unused-vars
+exports.getCart = (req, res, next) => {
+  const { userId } = req;
+  User.findById(userId)
+    .then((loggedinUser) => {
+      if (!loggedinUser) {
+        const error = new Error('Could not find user');
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ cart: loggedinUser.cart });
     }).catch((error) => {
       errorThrower(error, next);
     });

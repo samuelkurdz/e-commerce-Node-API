@@ -29,6 +29,10 @@ router.put('/edit-product/:productId', adminController.postEditProduct);
 // /admin/delete-product => DELETE
 router.delete('/delete-product/:productId', adminController.postDeleteProduct);
 
+//  get all orders
 // router.get('/orders', shopController.getOrders);
+
+//  edit orders statuses
+// router.put('/orders', shopController.getOrders);
 
 module.exports = router;

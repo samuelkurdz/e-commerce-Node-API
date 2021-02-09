@@ -19,8 +19,10 @@ router.delete('/cart/:productId', isAuthWare, shopController.deleteCartProduct);
 
 // router.post('/create-order', shopController.postOrder);
 
-// router.get('/orders', shopController.getOrders);
+// get only orders created by the loggedIn user
+// router.get('/orders', isAuthWare, shopController.getOrders);
 
+// i think orders (postOrder) should be created after checking out
 // router.get('/checkout', shopController.getCheckout);
 
 module.exports = router;

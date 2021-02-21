@@ -3,21 +3,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const orderSchema = new Schema({
-  products: [{
-    product: {
-      type: Schema.Types.ObjectId,
-      ref: 'Product',
-      required: true,
-    },
-    variationChoice: {
-      type: String,
-      required: true,
-    },
-    quantity: {
-      type: Number,
-      required: true,
-    },
-  }],
+  // preapre this data from userId after isAuthWare verification
   userData: {
     userId: {
       type: Schema.Types.ObjectId,
@@ -33,6 +19,22 @@ const orderSchema = new Schema({
       required: true,
     },
   },
+  // rest of these data comes from client (frontend)
+  products: [{
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: 'Product',
+      required: true,
+    },
+    variationChoice: {
+      type: String,
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
+  }],
   deliveryDetails: {
     address: {
       type: String,

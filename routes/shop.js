@@ -51,9 +51,9 @@ router.post(
 );
 
 // get only orders created by the loggedIn user
-// router.get('/orders', isAuthWare, shopController.getOrders);
+router.get('/orders', isAuthWare, orderController.getOrders);
 
 // i think orders (postOrder) should be created after checking out
-// router.get('/checkout', shopController.getCheckout);
+router.get('/checkout', orderController.getCheckout);
 
 module.exports = router;

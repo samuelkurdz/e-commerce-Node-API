@@ -29,9 +29,24 @@ router.delete('/cart/:productId', isAuthWare, shopController.deleteCartProduct);
 router.post(
   '/create-order',
   isAuthWare,
-  // [
-  //   body('productId').trim().not().isEmpty(),
-  // ],
+  [
+    body('name').trim().not().isEmpty(),
+    body('products').trim()
+      .isLength({ min: 1 })
+      .withMessage('You cannot make an order of empty products'),
+    // body('email').isEmail().withMessage('Please enter a valid email address')
+    //   // eslint-disable-next-line arrow-body-style
+    //   .custom((value) => {
+    //     return User.findOne({ email: value }).then((userDocument) => {
+    //       if (userDocument) {
+    //         // eslint-disable-next-line prefer-promise-reject-errors
+    //         return Promise.reject('Email address already exist');
+    //       }
+    //       return true;
+    //     });
+    //   })
+    //   .normalizeEmail(),
+  ],
   orderController.createOrder,
 );
 

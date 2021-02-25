@@ -2,9 +2,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
+const helmet = require('helmet');
 const app = express();
-const uri = 'mongodb+srv://samRed:dayo10red@cluster0.rrjom.mongodb.net/Ecommerce?retryWrites=true&w=majority';
+const uri = `${process.env.DATABASE_URL}`;
 
 const shopRoutes = require('./routes/shop');
 const adminRoutes = require('./routes/admin');
@@ -14,6 +14,7 @@ const authRoutes = require('./routes/auth');
 const errorController = require('./controllers/error');
 
 app.use(bodyParser.json());
+app.use(helmet());
 //  Fixing CORS Issues
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use('/auth', authRoutes);
 app.use(shopRoutes);
+
 
 // error handling middleware
 // eslint-disable-next-line no-unused-vars
@@ -41,7 +43,7 @@ app.use(errorController.get404);
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('connected');
-    app.listen(8080, () => {
+    app.listen(process.env.PORT || 8080, () => {
       console.log('server started');
     });
   }).catch((error) => {

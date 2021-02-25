@@ -72,7 +72,7 @@ exports.login = (req, res, next) => {
           email: loggedinUser.email,
           userId: loggedinUser._id.toString(),
         },
-        'redhassomesupersecrettotell',
+        process.env.TOKEN_DECRYPTER,
         { expiresIn: '1h' },
       );
       res.status(200).json({ token, userId: loggedinUser._id.toString() });

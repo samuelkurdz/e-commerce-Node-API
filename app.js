@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 const express = require('express');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const helmet = require('helmet');
+
 const app = express();
 const uri = `${process.env.DATABASE_URL}`;
 
@@ -26,7 +27,6 @@ app.use((req, res, next) => {
 app.use('/admin', adminRoutes);
 app.use('/auth', authRoutes);
 app.use(shopRoutes);
-
 
 // error handling middleware
 // eslint-disable-next-line no-unused-vars

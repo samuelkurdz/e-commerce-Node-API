@@ -1,19 +1,19 @@
 const express = require('express');
 const { body } = require('express-validator');
 
-const shopController = require('../controllers/shop');
+const productsController = require('../controllers/shop');
 const orderController = require('../controllers/order');
 
 const router = express.Router();
 const isAuthWare = require('../middlewares/is-auth');
 
 // /products => GET
-router.get('/products', shopController.getProducts);
+router.get('/products', productsController.getProducts);
 
 // /products/ single product id => GET
-router.get('/products/:productId', shopController.getSingleProduct);
+router.get('/products/:productId', productsController.getSingleProduct);
 
-router.get('/cart', isAuthWare, shopController.getCart);
+router.get('/cart', isAuthWare, productsController.getCart);
 
 router.put(
   '/cart',
@@ -21,10 +21,10 @@ router.put(
   [
     body('productId').trim().not().isEmpty(),
   ],
-  shopController.addProductToCart,
+  productsController.addProductToCart,
 );
 
-router.delete('/cart/:productId', isAuthWare, shopController.deleteCartProduct);
+router.delete('/cart/:productId', isAuthWare, productsController.deleteCartProduct);
 
 router.post(
   '/create-order',

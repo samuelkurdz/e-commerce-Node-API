@@ -27,13 +27,17 @@ exports.signUp = (req, res, next) => {
     error.data = errors.array();
     throw error;
   }
-  const { name, password, email } = req.body;
+  const {
+    name, password, email, phone, isAdmin,
+  } = req.body;
   bcrypt.hash(password, 12)
     .then((hashedPassword) => {
       const user = new User({
         name,
         email,
         password: hashedPassword,
+        isAdmin: !!isAdmin,
+        phone,
         cart: {
           items: [],
         },
@@ -51,7 +55,7 @@ exports.signUp = (req, res, next) => {
 exports.login = (req, res, next) => {
   const { password, email } = req.body;
   let loggedInUser;
-  User.findOne({ email })
+  User.findOne({ email }).lean()
     .then((user) => {
       if (!user) {
         const error = new Error('Could not find User with this email');
@@ -75,7 +79,15 @@ exports.login = (req, res, next) => {
         process.env.TOKEN_DECRYPTER,
         { expiresIn: '1h' },
       );
-      res.status(200).json({ token, userId: loggedInUser._id.toString() });
+      res.status(200).json({
+        token,
+        userId: loggedInUser._id.toString(),
+        isUserAdmin: loggedInUser.isAdmin,
+        userPhone: loggedInUser.phone,
+        name: loggedInUser.name,
+        email: loggedInUser.email,
+        cart: loggedInUser.cart,
+      });
     })
     .catch((error) => {
       errorThrower(error, next);

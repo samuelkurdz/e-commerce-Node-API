@@ -50,7 +50,7 @@ exports.signUp = (req, res, next) => {
 
 exports.login = (req, res, next) => {
   const { password, email } = req.body;
-  let loggedinUser;
+  let loggedInUser;
   User.findOne({ email })
     .then((user) => {
       if (!user) {
@@ -58,8 +58,8 @@ exports.login = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      loggedinUser = user;
-      return bcrypt.compare(password, loggedinUser.password);
+      loggedInUser = user;
+      return bcrypt.compare(password, loggedInUser.password);
     })
     .then((isEqual) => {
       if (!isEqual) {
@@ -69,13 +69,13 @@ exports.login = (req, res, next) => {
       }
       const token = jwt.sign(
         {
-          email: loggedinUser.email,
-          userId: loggedinUser._id.toString(),
+          email: loggedInUser.email,
+          userId: loggedInUser._id.toString(),
         },
         process.env.TOKEN_DECRYPTER,
         { expiresIn: '1h' },
       );
-      res.status(200).json({ token, userId: loggedinUser._id.toString() });
+      res.status(200).json({ token, userId: loggedInUser._id.toString() });
     })
     .catch((error) => {
       errorThrower(error, next);

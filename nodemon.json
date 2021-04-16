@@ -3,7 +3,8 @@
     "DATABASE-USER": "samRed",
     "DATABASE-PASSWORD": "dayo10red",
     "DATABASE": "Ecommerce",
-    "DATABASE_URL": "mongodb+srv://samRed:dayo10red@cluster0.rrjom.mongodb.net/Ecommerce?retryWrites=true&w=majority",
+    "DATABASE_URL": "mongodb://127.0.0.1:27017/Ecommerce",
+    "ONLINE_DATABASE_URL": "mongodb+srv://samRed:dayo10red@cluster0.rrjom.mongodb.net/Ecommerce?retryWrites=true&w=majority",
     "TOKEN_DECRYPTER": "redhassomesupersecrettotell"
   }
 }

@@ -32,7 +32,7 @@ router.put(
     body('confirmPassword').custom((value, { req }) => {
       if (value !== req.body.password) {
         // eslint-disable-next-line prefer-promise-reject-errors
-        return Promise.reject('Passwrords have to match');
+        return Promise.reject('Passwords have to match');
       }
       return true;
     }),

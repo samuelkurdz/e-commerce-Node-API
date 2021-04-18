@@ -40,7 +40,13 @@ app.use((error, req, res, next) => {
 
 app.use(errorController.get404);
 
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(uri,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  })
   .then(() => {
     console.log('connected');
     app.listen(process.env.PORT || 8080, () => {

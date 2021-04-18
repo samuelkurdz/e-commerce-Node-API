@@ -2,6 +2,7 @@
 /* eslint-disable no-console */
 const { validationResult } = require('express-validator');
 const Product = require('../models/product');
+const Category = require('../models/category');
 
 function errorThrower(error, next) {
   if (!error.statusCode) {
@@ -19,9 +20,85 @@ function noProductFoundError(product) {
   }
 }
 
+function removeUndefinedPropertyFromObject(object) {
+  Object.keys(object).forEach((key) => (object[key] === undefined ? delete object[key] : {}));
+}
 // for all throw errors in a then block
 // the remainder of the async code stops
 // it moves to the catch error callback
+
+// using async await comes with try&catch (syntactic sugar)
+exports.getCategories = async (req, res, next) => {
+  try {
+    const categories = await Category.find().lean();
+    res.status(200).json(categories);
+  } catch (error) {
+    errorThrower(error, next);
+  }
+};
+
+exports.createCategory = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed, entered data is incorrect');
+    error.statusCode = 400;
+    error.data = errors.array();
+    errorThrower(error, next);
+  } else {
+    const {
+      name, icon, color, image,
+    } = req.body;
+    const newCategory = new Category({
+      name,
+      icon: icon || '',
+      color: color || '',
+      image: image || '',
+    });
+    //  saving category to database
+    try {
+      const createdCategory = await newCategory.save();
+      res.status(201).json({ message: 'category created', category: createdCategory });
+    } catch (error) {
+      errorThrower(error, next);
+    }
+  }
+};
+
+exports.deleteCategory = async (req, res, next) => {
+  const { categoryId } = req.params;
+  try {
+    const deletedCategory = await Category.findByIdAndRemove(categoryId);
+    res.status(200).json({ message: 'Category Deleted Successfully' });
+  } catch (error) {
+    errorThrower(error, next);
+  }
+  // Category.findByIdAndRemove(categoryId)
+  //   .then((result) => {
+  //     res.status(200).json({ message: 'Category Deleted Successfully' });
+  //   })
+  //   .catch((error) => {
+  //     errorThrower(error, next);
+  //   });
+};
+
+exports.updateCategory = async (req, res, next) => {
+  const { categoryId } = req.params;
+  const {
+    name, icon, color, image,
+  } = req.body;
+  const update = {
+    name, icon, color, image,
+  };
+  removeUndefinedPropertyFromObject(update);
+  try {
+    let category = await Category.findByIdAndUpdate(categoryId, update).lean();
+    // category is the previous object, now updated in the spread below
+    category = { ...category, ...update };
+    res.status(200).json({ message: 'Category Updated Successfully', category });
+  } catch (error) {
+    errorThrower(error, next);
+  }
+};
 
 exports.getProducts = (req, res, next) => {
   Product.find().lean()

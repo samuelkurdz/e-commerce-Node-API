@@ -64,20 +64,21 @@ exports.createCategory = async (req, res, next) => {
   }
 };
 
-exports.deleteCategory = (req, res, next) => {
+exports.deleteCategory = async (req, res, next) => {
   const { categoryId } = req.params;
-  Category.findByIdAndRemove(categoryId)
-    .then((result) => {
-      if (!result) {
-        const error = new Error('Category does not exist');
-        error.statusCode = 400;
-        throw error;
-      }
-      res.status(200).json({ message: 'Category Deleted Successfully' });
-    })
-    .catch((error) => {
-      errorThrower(error, next);
-    });
+  try {
+    const deletedCategory = await Category.findByIdAndRemove(categoryId);
+    res.status(200).json({ message: 'Category Deleted Successfully' });
+  } catch (error) {
+    errorThrower(error, next);
+  }
+  // Category.findByIdAndRemove(categoryId)
+  //   .then((result) => {
+  //     res.status(200).json({ message: 'Category Deleted Successfully' });
+  //   })
+  //   .catch((error) => {
+  //     errorThrower(error, next);
+  //   });
 };
 
 exports.updateCategory = async (req, res, next) => {

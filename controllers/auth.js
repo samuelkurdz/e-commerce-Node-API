@@ -27,13 +27,17 @@ exports.signUp = (req, res, next) => {
     error.data = errors.array();
     throw error;
   }
-  const { name, password, email } = req.body;
+  const {
+    name, password, email, phone, isAdmin,
+  } = req.body;
   bcrypt.hash(password, 12)
     .then((hashedPassword) => {
       const user = new User({
         name,
         email,
         password: hashedPassword,
+        isAdmin: !!isAdmin,
+        phone: phone || null,
         cart: {
           items: [],
         },
@@ -50,18 +54,19 @@ exports.signUp = (req, res, next) => {
 
 exports.login = (req, res, next) => {
   const { password, email } = req.body;
-  let loggedinUser;
-  User.findOne({ email })
+  let loggedInUser;
+  User.findOne({ email }).lean()
     .then((user) => {
       if (!user) {
         const error = new Error('Could not find User with this email');
         error.statusCode = 404;
         throw error;
       }
-      loggedinUser = user;
-      return bcrypt.compare(password, loggedinUser.password);
+      loggedInUser = user;
+      return bcrypt.compare(password, loggedInUser.password);
     })
     .then((isEqual) => {
+      // isEqual is the boolean value returned from the bcrypt of password comparisons
       if (!isEqual) {
         const error = new Error('Password is incorrect');
         error.statusCode = 401;
@@ -69,13 +74,22 @@ exports.login = (req, res, next) => {
       }
       const token = jwt.sign(
         {
-          email: loggedinUser.email,
-          userId: loggedinUser._id.toString(),
+          email: loggedInUser.email,
+          userId: loggedInUser._id.toString(),
+          isAdmin: loggedInUser.isAdmin,
         },
         process.env.TOKEN_DECRYPTER,
         { expiresIn: '1h' },
       );
-      res.status(200).json({ token, userId: loggedinUser._id.toString() });
+      res.status(200).json({
+        token,
+        userId: loggedInUser._id.toString(),
+        name: loggedInUser.name,
+        email: loggedInUser.email,
+        isAdmin: loggedInUser.isAdmin,
+        userPhone: loggedInUser.phone,
+        cart: loggedInUser.cart,
+      });
     })
     .catch((error) => {
       errorThrower(error, next);

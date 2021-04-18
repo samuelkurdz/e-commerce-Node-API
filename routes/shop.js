@@ -1,34 +1,36 @@
 const express = require('express');
 const { body } = require('express-validator');
 
-const shopController = require('../controllers/shop');
+const productsController = require('../controllers/shop');
 const orderController = require('../controllers/order');
 
 const router = express.Router();
-const isAuthWare = require('../middlewares/is-auth');
+const isUserAuthWare = require('../middlewares/user-auth');
 
 // /products => GET
-router.get('/products', shopController.getProducts);
+router.get('/products', productsController.getProducts);
 
 // /products/ single product id => GET
-router.get('/products/:productId', shopController.getSingleProduct);
+router.get('/products/:productId', productsController.getSingleProduct);
 
-router.get('/cart', isAuthWare, shopController.getCart);
+router.get('/cart', isUserAuthWare, productsController.getCart);
 
+// add single product to cart => PUT
 router.put(
   '/cart',
-  isAuthWare,
+  isUserAuthWare,
   [
     body('productId').trim().not().isEmpty(),
   ],
-  shopController.addProductToCart,
+  productsController.addProductToCart,
 );
 
-router.delete('/cart/:productId', isAuthWare, shopController.deleteCartProduct);
+// remove single product from cart => DELETE
+router.delete('/cart/:productId', isUserAuthWare, productsController.deleteCartProduct);
 
 router.post(
   '/create-order',
-  isAuthWare,
+  isUserAuthWare,
   [
     body('name').trim().not().isEmpty(),
     body('products').trim()
@@ -51,7 +53,7 @@ router.post(
 );
 
 // get only orders created by the loggedIn user
-router.get('/orders', isAuthWare, orderController.getOrders);
+router.get('/orders', isUserAuthWare, orderController.getOrders);
 
 // i think orders (postOrder) should be created after checking out
 router.get('/checkout', orderController.getCheckout);

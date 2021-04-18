@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const orderSchema = new Schema({
-  // preapre this data from userId after isAuthWare verification
+  // prepare this data from userId after isAuthWare verification
   userData: {
     userId: {
       type: Schema.Types.ObjectId,

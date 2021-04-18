@@ -5,9 +5,7 @@ const Product = require('../models/product');
 
 function errorThrower(error, next) {
   if (!error.statusCode) {
-    // eslint-disable-next-line no-param-reassign
     error.statusCode = 500;
-    // eslint-disable-next-line no-param-reassign
     error.message = 'Internal Server Error';
   }
   next(error);

@@ -6,9 +6,15 @@ const isAdminAuthWare = require('../middlewares/is-admin-auth');
 
 const router = express.Router();
 
+// /admin/categories => GET (get all categories)
+router.get('/categories', isAdminAuthWare, adminController.getCategories);
+// /admin/categories => POST (new category)
+router.post('/categories', isAdminAuthWare, adminController.createCategory);
+// /admin/categories => DELETE (remove existing category)
+router.delete('/categories/:categoryId', isAdminAuthWare, adminController.deleteCategory);
+
 // /admin/products => GET
 router.get('/products', isAdminAuthWare, adminController.getProducts);
-
 // /admin/add-product => POST
 router.post(
   '/add-product',

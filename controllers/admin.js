@@ -2,6 +2,7 @@
 /* eslint-disable no-console */
 const { validationResult } = require('express-validator');
 const Product = require('../models/product');
+const Category = require('../models/category');
 
 function errorThrower(error, next) {
   if (!error.statusCode) {
@@ -22,6 +23,54 @@ function noProductFoundError(product) {
 // for all throw errors in a then block
 // the remainder of the async code stops
 // it moves to the catch error callback
+
+exports.getCategories = (req, res, next) => {
+  Category.find().lean()
+    .then((categories) => {
+      if (!categories) {
+        const error = new Error('No Content');
+        error.statusCode = 204;
+        throw error;
+      }
+      res.status(200).json(categories);
+    })
+    .catch((error) => {
+      errorThrower(error, next);
+    });
+};
+
+exports.createCategory = (req, res, next) => {
+  const {
+    name, icon, color, image,
+  } = req.body;
+  const newCategory = new Category({
+    name, icon, color, image,
+  });
+  //  saving category to database
+  newCategory.save()
+    .then((result) => {
+      res.status(201).json(result);
+    })
+    .catch((error) => {
+      errorThrower(error, next);
+    });
+};
+
+exports.deleteCategory = (req, res, next) => {
+  const { categoryId } = req.params;
+  Category.findByIdAndRemove(categoryId)
+    .then((result) => {
+      if (!result) {
+        const error = new Error('Category does not exist');
+        error.statusCode = 400;
+        throw error;
+      }
+      res.status(200).json({ message: 'Category Deleted Successfully' });
+    })
+    .catch((error) => {
+      errorThrower(error, next);
+    });
+};
 
 exports.getProducts = (req, res, next) => {
   Product.find().lean()

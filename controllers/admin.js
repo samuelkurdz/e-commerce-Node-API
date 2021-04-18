@@ -20,6 +20,9 @@ function noProductFoundError(product) {
   }
 }
 
+function removeUndefinedPropertyFromObject(object) {
+  Object.keys(object).forEach((key) => (object[key] === undefined ? delete object[key] : {}));
+}
 // for all throw errors in a then block
 // the remainder of the async code stops
 // it moves to the catch error callback
@@ -75,6 +78,25 @@ exports.deleteCategory = (req, res, next) => {
     .catch((error) => {
       errorThrower(error, next);
     });
+};
+
+exports.updateCategory = async (req, res, next) => {
+  const { categoryId } = req.params;
+  const {
+    name, icon, color, image,
+  } = req.body;
+  const update = {
+    name, icon, color, image,
+  };
+  removeUndefinedPropertyFromObject(update);
+  try {
+    let category = await Category.findByIdAndUpdate(categoryId, update).lean();
+    // category is the previous object, now updated in the spread below
+    category = { ...category, ...update };
+    res.status(200).json({ message: 'Category Updated Successfully', category });
+  } catch (error) {
+    errorThrower(error, next);
+  }
 };
 
 exports.getProducts = (req, res, next) => {

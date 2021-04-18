@@ -8,6 +8,7 @@ const Category = require('../models/category');
 
 const router = express.Router();
 
+/** * Categories endpoints * */
 // /admin/categories => GET (get all categories)
 router.get('/categories', isAdminAuthWare, adminController.getCategories);
 // /admin/categories => POST (new category)
@@ -24,7 +25,10 @@ router.post('/categories', [
 ], adminController.createCategory);
 // /admin/categories/categoryId => DELETE (remove existing category)
 router.delete('/categories/:categoryId', isAdminAuthWare, adminController.deleteCategory);
+// /admin/categories/categoryId => PUT (remove existing category)
+router.patch('/categories/:categoryId', isAdminAuthWare, adminController.updateCategory);
 
+/** * Products endpoints * */
 // /admin/products => GET
 router.get('/products', isAdminAuthWare, adminController.getProducts);
 // /admin/add-product => POST

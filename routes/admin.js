@@ -4,13 +4,25 @@ const { body } = require('express-validator');
 const adminController = require('../controllers/admin');
 const isAdminAuthWare = require('../middlewares/is-admin-auth');
 
+const Category = require('../models/category');
+
 const router = express.Router();
 
 // /admin/categories => GET (get all categories)
 router.get('/categories', isAdminAuthWare, adminController.getCategories);
 // /admin/categories => POST (new category)
-router.post('/categories', isAdminAuthWare, adminController.createCategory);
-// /admin/categories => DELETE (remove existing category)
+router.post('/categories', [
+  isAdminAuthWare,
+  body('name')
+    .custom((value) => Category.findOne({ name: value }).then((existingCategory) => {
+      if (existingCategory) {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        return Promise.reject('Category already exist');
+      }
+      return true;
+    })),
+], adminController.createCategory);
+// /admin/categories/categoryId => DELETE (remove existing category)
 router.delete('/categories/:categoryId', isAdminAuthWare, adminController.deleteCategory);
 
 // /admin/products => GET

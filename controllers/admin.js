@@ -24,36 +24,41 @@ function noProductFoundError(product) {
 // the remainder of the async code stops
 // it moves to the catch error callback
 
-exports.getCategories = (req, res, next) => {
-  Category.find().lean()
-    .then((categories) => {
-      if (!categories) {
-        const error = new Error('No Content');
-        error.statusCode = 204;
-        throw error;
-      }
-      res.status(200).json(categories);
-    })
-    .catch((error) => {
-      errorThrower(error, next);
-    });
+// using async await comes with try&catch (syntactic sugar)
+exports.getCategories = async (req, res, next) => {
+  try {
+    const categories = await Category.find().lean();
+    res.status(200).json(categories);
+  } catch (error) {
+    errorThrower(error, next);
+  }
 };
 
-exports.createCategory = (req, res, next) => {
-  const {
-    name, icon, color, image,
-  } = req.body;
-  const newCategory = new Category({
-    name, icon, color, image,
-  });
-  //  saving category to database
-  newCategory.save()
-    .then((result) => {
-      res.status(201).json(result);
-    })
-    .catch((error) => {
-      errorThrower(error, next);
+exports.createCategory = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = new Error('Validation failed, entered data is incorrect');
+    error.statusCode = 400;
+    error.data = errors.array();
+    errorThrower(error, next);
+  } else {
+    const {
+      name, icon, color, image,
+    } = req.body;
+    const newCategory = new Category({
+      name,
+      icon: icon || '',
+      color: color || '',
+      image: image || '',
     });
+    //  saving category to database
+    try {
+      const createdCategory = await newCategory.save();
+      res.status(201).json({ message: 'category created', category: createdCategory });
+    } catch (error) {
+      errorThrower(error, next);
+    }
+  }
 };
 
 exports.deleteCategory = (req, res, next) => {

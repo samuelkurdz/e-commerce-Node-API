@@ -31,7 +31,7 @@ app.use(shopRoutes);
 // error handling middleware
 // eslint-disable-next-line no-unused-vars
 app.use((error, req, res, next) => {
-  console.log(error, 'error logged');
+  // console.log(error, 'error logged');
   const status = error.statusCode || 500;
   const { message } = error;
   const { data } = error;

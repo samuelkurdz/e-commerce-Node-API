@@ -37,7 +37,7 @@ exports.signUp = (req, res, next) => {
         email,
         password: hashedPassword,
         isAdmin: !!isAdmin,
-        phone,
+        phone: phone || null,
         cart: {
           items: [],
         },
@@ -66,6 +66,7 @@ exports.login = (req, res, next) => {
       return bcrypt.compare(password, loggedInUser.password);
     })
     .then((isEqual) => {
+      // isEqual is the boolean value returned from the bcrypt of password comparisons
       if (!isEqual) {
         const error = new Error('Password is incorrect');
         error.statusCode = 401;
@@ -82,10 +83,10 @@ exports.login = (req, res, next) => {
       res.status(200).json({
         token,
         userId: loggedInUser._id.toString(),
-        isUserAdmin: loggedInUser.isAdmin,
-        userPhone: loggedInUser.phone,
         name: loggedInUser.name,
         email: loggedInUser.email,
+        isAdmin: loggedInUser.isAdmin,
+        userPhone: loggedInUser.phone,
         cart: loggedInUser.cart,
       });
     })

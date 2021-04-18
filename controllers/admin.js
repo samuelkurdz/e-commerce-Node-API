@@ -26,8 +26,9 @@ function noProductFoundError(product) {
 // it moves to the catch error callback
 
 exports.getProducts = (req, res, next) => {
-  Product.find()
+  Product.find().lean()
     .then((products) => {
+      console.log(products);
       if (!products) {
         const error = new Error('No Content');
         error.statusCode = 204;
@@ -80,7 +81,7 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getSingleProduct = (req, res, next) => {
   const { productId } = req.params;
-  Product.findById(productId)
+  Product.findById(productId).lean()
     .then((product) => {
       noProductFoundError(product);
       res.status(200).json(product);

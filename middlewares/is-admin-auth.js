@@ -25,10 +25,17 @@ module.exports = (req, res, next) => {
     errorThrower(error, next);
   }
   if (!decodedToken) {
-    const error = new Error('Not authenticated');
+    const error = new Error('Not Authorized');
     error.statusCode = 401;
     throw error;
   }
-  req.userId = decodedToken.userId;
+
+  const { isAdmin, userId } = decodedToken;
+  if (!isAdmin) {
+    const error = new Error('Not Authorized');
+    error.statusCode = 403;
+    throw error;
+  }
+  req.userId = userId;
   next();
 };

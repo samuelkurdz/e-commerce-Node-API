@@ -76,6 +76,7 @@ exports.login = (req, res, next) => {
         {
           email: loggedInUser.email,
           userId: loggedInUser._id.toString(),
+          isAdmin: loggedInUser.isAdmin,
         },
         process.env.TOKEN_DECRYPTER,
         { expiresIn: '1h' },

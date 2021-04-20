@@ -67,6 +67,7 @@ exports.createCategory = async (req, res, next) => {
 exports.deleteCategory = async (req, res, next) => {
   const { categoryId } = req.params;
   try {
+    // eslint-disable-next-line no-unused-vars
     const deletedCategory = await Category.findByIdAndRemove(categoryId);
     res.status(200).json({ message: 'Category Deleted Successfully' });
   } catch (error) {
@@ -100,20 +101,20 @@ exports.updateCategory = async (req, res, next) => {
   }
 };
 
-exports.getProducts = (req, res, next) => {
-  Product.find().lean()
-    .then((products) => {
-      console.log(products);
-      if (!products) {
-        const error = new Error('No Content');
-        error.statusCode = 204;
-        throw error;
-      }
-      res.status(200).json(products);
-    })
-    .catch((error) => {
-      errorThrower(error, next);
-    });
+exports.getProducts = async (req, res, next) => {
+  try {
+    const products = await Product.find().populate('category').lean();
+    res.status(200).json(products);
+  } catch (error) {
+    errorThrower(error, next);
+  }
+  // Product.find().lean()
+  //   .then((products) => {
+  //     res.status(200).json(products);
+  //   })
+  //   .catch((error) => {
+  //     errorThrower(error, next);
+  //   });
 };
 
 // eslint-disable-next-line consistent-return
@@ -128,21 +129,27 @@ exports.postAddProduct = (req, res, next) => {
 
   const {
     name,
-    categories,
-    availableQuantity,
+    image,
+    brand,
     price,
+    category,
+    isFeatured,
+    variations,
     description,
     thumbnailUrls,
-    variations,
+    quantityInStock,
   } = req.body;
   const product = new Product({
     name,
-    categories,
-    availableQuantity,
+    image,
+    brand,
     price,
+    category,
+    isFeatured,
+    variations,
     description,
     thumbnailUrls,
-    variations,
+    quantityInStock,
   });
   //  saving product to database
   product.save()

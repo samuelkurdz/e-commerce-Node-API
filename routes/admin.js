@@ -33,12 +33,18 @@ router.patch('/categories/:categoryId', isAdminAuthWare, adminController.updateC
 router.get('/products', isAdminAuthWare, adminController.getProducts);
 // /admin/add-product => POST
 router.post(
-  '/add-product',
+  '/products',
   // minimal validation in place
   // will look into it later
   [
-    // isAdminAuthWare,
+    isAdminAuthWare,
     body('name').trim().not().isEmpty(),
+    body('image').trim().not().isEmpty(),
+    body('brand').trim().not().isEmpty(),
+    body('category').trim().not().isEmpty()
+      .withMessage('Product Category is required'),
+    body('variations').trim().not().isEmpty(),
+    body('quantityInStock').trim().not().isEmpty(),
   ],
   adminController.postAddProduct,
 );

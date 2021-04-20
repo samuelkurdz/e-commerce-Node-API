@@ -12,7 +12,24 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
-  thumbnailUrls: [{
+  brand: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true,
+  },
+  isFeatured: {
+    type: Boolean,
+    default: false,
+  },
+  variations: [{
     type: String,
     required: false,
   }],
@@ -20,16 +37,7 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
-  brand: {
-    type: String,
-    required: true,
-  },
-  categories: {
-    type: Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true,
-  },
-  variations: [{
+  thumbnailUrls: [{
     type: String,
     required: false,
   }],
@@ -38,14 +46,6 @@ const productSchema = new Schema({
     required: true,
     min: 0,
     max: 50,
-  },
-  isFeatured: {
-    type: Boolean,
-    default: false,
-  },
-  price: {
-    type: Number,
-    required: true,
   },
   rating: {
     type: Number,
